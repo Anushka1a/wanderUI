@@ -1,6 +1,7 @@
 # WanderUI — Find your somewhere
 
 A responsive travel discovery website with a vanilla HTML/CSS/JavaScript frontend and an optional Node.js + Express API backend.
+ **Live Demo:** https://wanderui.onrender.com/
 
 ## Features
 - Search the global OpenStreetMap-based place index through Photon (not limited to the curated starter destinations)
@@ -10,27 +11,30 @@ A responsive travel discovery website with a vanilla HTML/CSS/JavaScript fronten
 - Server-side API proxy with basic in-memory caching, timeout handling, and alternate Overpass endpoint
 - Curated destination cards, filters/sorting, destination details, favorites, trip planner, themes, and responsive navigation
 
-## Run with the Node.js backend (recommended for development)
+## Local Setup (Run the Node.js Backend)
 Requires Node.js 18 or newer.
 
-1. Open this folder in VS Code.
-2. Open Terminal in this folder.
+1. Open this project folder in VS Code.
+
+2. Open the terminal in this folder.
+
 3. Install dependencies:
 
-   ```bash
-   npm install
-   ```
+npm install
 
-4. Start the app:
+4. Start the application:
 
-   ```bash
-   npm start
-   ```
+npm start
 
-5. Open http://localhost:3000
-6. Test the API directly at http://localhost:3000/api/health or http://localhost:3000/api/search?q=Haridwar.
+5. Open the application in your browser:
 
-The frontend automatically uses `/api/search` and `/api/details` on localhost. If opened from a static host such as GitHub Pages, it falls back to calling the public APIs directly.
+http://localhost:3000
+
+Test the API endpoints:
+
+- Health check: http://localhost:3000/api/health
+
+Search example: http://localhost:3000/api/search?q=Haridwar
 
 ## Important data limits
 No public source contains complete, verified information about literally every place. Photon search coverage depends on OpenStreetMap mapping and may return towns, villages, neighborhoods, landmarks, or duplicate/multiple matches. Wikipedia summaries and photos may not exist for every result. Attractions depend on what local contributors have mapped. This app does not currently provide live hotel availability/prices, transport fares, or verified real-time budgets; do not treat its indicative budgets as quotes.
@@ -38,4 +42,10 @@ No public source contains complete, verified information about literally every p
 Public APIs can be rate-limited or temporarily unavailable. Keep caching enabled and avoid excessive requests. OpenStreetMap data attribution: https://www.openstreetmap.org/copyright. Wikimedia/Wikipedia content and images are subject to their respective licenses and attribution requirements.
 
 ## Deploy
-GitHub Pages can host the static frontend, but **cannot run this Express server**. For the full backend experience, deploy this folder to a Node.js hosting service and configure the frontend to use that backend URL (and enable appropriate CORS/security settings if frontend and backend use different domains). The static frontend remains usable with its direct public-API fallback on GitHub Pages.
+The full-stack WanderUI application is deployed on Render.
+
+- **Live Demo:** https://wanderui.onrender.com/
+- **Backend:** Node.js + Express
+- **Frontend:** HTML, CSS, and JavaScript
+
+Note: Render's free web service may spin down after inactivity, so the first request may take longer to load. GitHub Pages can host the static frontend, but it cannot run the Node.js backend.
