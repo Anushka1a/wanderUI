@@ -39,4 +39,10 @@ No public source contains complete, verified information about literally every p
 Public APIs can be rate-limited or temporarily unavailable. Keep caching enabled and avoid excessive requests. OpenStreetMap data attribution: https://www.openstreetmap.org/copyright. Wikimedia/Wikipedia content and images are subject to their respective licenses and attribution requirements.
 
 ## Deploy
-GitHub Pages can host the static frontend, but **cannot run this Express server**. For the full backend experience, deploy this folder to a Node.js hosting service and configure the frontend to use that backend URL (and enable appropriate CORS/security settings if frontend and backend use different domains). The static frontend remains usable with its direct public-API fallback on GitHub Pages.
+The full-stack WanderUI application is deployed on Render.
+
+- **Live Demo:** https://wanderui.onrender.com/
+- **Backend:** Node.js + Express
+- **Frontend:** HTML, CSS, and JavaScript
+
+Note: Render's free web service may spin down after inactivity, so the first request may take longer to load. GitHub Pages can host the static frontend, but it cannot run the Node.js backend.
