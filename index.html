@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="WanderUI — discover places worth getting lost in." />
+  <title>WanderUI — Find your somewhere</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#" aria-label="WanderUI home"><span class="brand-mark">w.</span><span>Wander<span class="brand-light">UI</span></span></a>
+    <nav class="desktop-nav" aria-label="Main navigation">
+      <a href="#explore">Explore</a>
+      <a href="#story">Our philosophy</a>
+      <a href="#planner">Trip planner</a>
+    </nav>
+    <div class="header-actions">
+      <button class="icon-button" id="themeToggle" aria-label="Toggle light and dark theme" title="Toggle theme">☼</button>
+      <button class="saved-button" id="showSaved"><span aria-hidden="true">♡</span> Saved <span id="savedCount" class="saved-count">0</span></button>
+      <button class="menu-button" id="menuToggle" aria-label="Open navigation" aria-expanded="false">☰</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="eyebrow-line"></span> YOUR NEXT CHAPTER STARTS HERE</p>
+        <h1>Find your<br><em>somewhere.</em></h1>
+        <p class="hero-description">For the places that stay with you long after you've left. Discover thoughtful escapes, hidden corners, and the beauty of going a little further.</p>
+        <div class="hero-actions">
+          <a class="button button-dark" href="#explore">Explore places <span>↗</span></a>
+          <button class="button button-quiet" id="surpriseMe"><span class="sparkle">✳</span> Surprise me</button>
+        </div>
+        <div class="hero-footnote"><span class="avatar-stack"><i>✦</i><i>↗</i><i>⌁</i></span><span>Made for curious souls <b>·</b> 23+ places to begin</span></div>
+      </div>
+      <div class="hero-visual">
+        <img class="hero-image" src="https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=1400&q=85" alt="Colorful coastal village overlooking the sea" />
+        <div class="image-shade"></div>
+        <div class="hero-image-label"><span class="label-dot"></span><span>THE ITALIAN RIVIERA</span><span class="label-divider"></span><span>44°18' N</span></div>
+        <div class="floating-note"><span class="note-icon">✳</span><div><b>A little more wonder</b><small>Less scrolling. More going.</small></div></div>
+        <div class="image-index">01 <span>/</span> 04</div>
+      </div>
+    </section>
+
+    <section class="ticker" aria-label="Travel inspiration">
+      <div class="ticker-track"><span>TAKE THE SCENIC ROUTE</span><i>✳</i><span>COLLECT MOMENTS</span><i>✳</i><span>STAY CURIOUS</span><i>✳</i><span>TAKE THE SCENIC ROUTE</span><i>✳</i><span>COLLECT MOMENTS</span><i>✳</i><span>STAY CURIOUS</span><i>✳</i></div>
+    </section>
+
+    <section class="explore-section section-wrap" id="explore">
+      <div class="section-heading">
+        <div><p class="eyebrow">A WORLD OF POSSIBILITIES</p><h2>Where to <em>next?</em></h2></div>
+        <p class="section-intro">A few places to fall for. Pick a mood, follow a feeling, and see where it takes you.</p>
+      </div>
+
+      <div class="explore-tools">
+        <label class="search-box" for="destinationSearch"><span aria-hidden="true">⌕</span><input id="destinationSearch" type="search" placeholder="Search places, countries, moods..." autocomplete="off" /><kbd>↵</kbd></label>
+        <div class="filter-row" id="filterRow" aria-label="Filter destinations">
+          <button class="filter-chip active" data-filter="All">All places <span>23+</span></button>
+          <button class="filter-chip" data-filter="Coast">Coast</button>
+          <button class="filter-chip" data-filter="Nature">Nature</button>
+          <button class="filter-chip" data-filter="Culture">Culture</button>
+          <button class="filter-chip" data-filter="Slow">Slow living</button>
+        </div>
+      </div>
+
+      <div class="results-line"><span id="resultsLabel">Showing destinations worth discovering</span><label class="sort-label" for="sortSelect">Sort by <select id="sortSelect"><option value="featured">Featured</option><option value="budget">Budget: low to high</option><option value="name">Name: A–Z</option></select></label></div>
+      <div class="destination-grid" id="destinationGrid" aria-live="polite"></div>
+      <div class="empty-state" id="emptyState" hidden><span>⌕</span><h3>No places found just yet</h3><p>Try another search or choose a different mood.</p><button class="button button-outline" id="clearFilters">Clear filters</button></div>
+    </section>
+
+    <section class="quote-section" id="story">
+      <div class="quote-symbol">“</div>
+      <p class="eyebrow">A NOTE FROM WANDERUI</p>
+      <blockquote>The best trips aren't always the ones you plan perfectly. They're the ones that make you feel a little more <em>alive.</em></blockquote>
+      <span class="quote-credit">A reminder to leave room for the unexpected.</span>
+    </section>
+
+    <section class="planner-section section-wrap" id="planner">
+      <div class="planner-copy"><p class="eyebrow">MAKE IT YOURS</p><h2>Your next trip,<br><em>taking shape.</em></h2><p>Collect the places that call to you. Add a few notes, give your trip a name, and keep your little plan in one place.</p><div class="planner-stat"><span class="planner-stat-icon">↗</span><span><b>Simple by design</b><small>Your plan stays in this browser.</small></span></div></div>
+      <div class="planner-card">
+        <div class="planner-card-top"><div><span class="mini-eyebrow">YOUR TRAVEL JOURNAL</span><h3 id="plannerTitle">The someday list</h3></div><span class="journal-icon">✳</span></div>
+        <label class="field-label" for="tripName">Give this trip a name</label><input class="text-field" id="tripName" type="text" maxlength="45" placeholder="e.g. A week by the sea" />
+        <label class="field-label" for="tripNotes">Little notes to remember</label><textarea class="text-field notes-field" id="tripNotes" rows="3" maxlength="350" placeholder="A place to stay, a cafe to find, a road to take..."></textarea>
+        <div class="planner-card-bottom"><span id="planStatus">Your plan saves automatically</span><button class="button button-dark" id="savePlan">Save my plan <span>↗</span></button></div>
+        <div class="plan-confirmation" id="planConfirmation" role="status" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="newsletter-section">
+      <div><p class="eyebrow">A POSTCARD, NOW AND THEN</p><h2>A little wonder in<br>your <em>inbox.</em></h2></div>
+      <form id="postcardForm" class="postcard-form"><label for="emailInput" class="sr-only">Email address</label><input id="emailInput" type="email" placeholder="Your email address" required /><button class="button button-dark" type="submit">Count me in <span>↗</span></button><p id="emailMessage">Just inspiration. No noise. (Demo form — no email is sent.)</p></form>
+    </section>
+  </main>
+
+  <footer class="site-footer"><a class="brand" href="#"><span class="brand-mark">w.</span><span>Wander<span class="brand-light">UI</span></span></a><span>Made for the places you haven't met yet.</span><a href="#top" id="backToTop">Back to top ↑</a><small>© <span id="year"></span> WanderUI · A frontend travel concept</small></footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="modal-backdrop" id="detailsModal" hidden>
+    <section class="details-modal" role="dialog" aria-modal="true" aria-labelledby="detailsTitle">
+      <button class="icon-button details-close" id="closeDetails" aria-label="Close destination details">×</button>
+      <img id="detailsImage" class="details-hero" src="" alt="" />
+      <div class="details-body">
+        <p class="eyebrow" id="detailsEyebrow">DESTINATION GUIDE</p>
+        <h2 id="detailsTitle">Destination</h2>
+        <p class="details-location" id="detailsLocation"></p>
+        <p class="details-description" id="detailsDescription"></p>
+        <div class="details-facts">
+          <div><span>ESTIMATED DAILY COST</span><b id="detailsCost">Check local prices</b><small id="detailsCostNote">Planning estimate, not a live quote</small></div>
+          <div><span>GOOD FOR</span><b id="detailsMood">Discovery</b><small id="detailsDuration">Suggested stay: 1–2 days</small></div>
+        </div>
+        <h3>Ideas for your visit</h3>
+        <ul id="detailsHighlights" class="details-highlights"></ul>
+        <p class="details-note" id="detailsNote">Costs vary by season, accommodation and travel style. Check current prices before booking.</p>
+        <div class="details-actions"><button class="button button-dark" id="addDetailsToPlan">Add to my trip plan <span>↗</span></button><button class="button button-outline" id="saveDetailsPlace">♡ Save place</button></div>
+        <p class="details-attribution">World locations are sourced from OpenStreetMap-based search. Destination tips and budgets are indicative and may not be available for every searched place.</p>
+      </div>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" id="savedModal" hidden>
+    <section class="saved-modal" role="dialog" aria-modal="true" aria-labelledby="savedModalTitle">
+      <div class="modal-heading"><div><p class="eyebrow">YOUR LITTLE COLLECTION</p><h2 id="savedModalTitle">Saved <em>places.</em></h2></div><button class="icon-button close-modal" id="closeSaved" aria-label="Close saved places">×</button></div>
+      <div id="savedList" class="saved-list"></div>
+      <p class="modal-footnote">Your saved places are stored on this device using localStorage.</p>
+    </section>
+  </div>
+</body>
+</html>
