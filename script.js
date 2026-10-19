@@ -418,16 +418,48 @@ function init() {
   $("#destinationGrid").addEventListener("click", handleGridClick);
   $("#closeDetails").addEventListener("click", closeDestinationDetails);
   $("#detailsModal").addEventListener("click", event => { if (event.target === $("#detailsModal")) closeDestinationDetails(); });
-  $("#addDetailsToPlan").addEventListener("click", event => {
-    const place = allDestinations().find(item => item.id === event.currentTarget.dataset.destinationId);
-    if (!place) return;
-    $("#tripName").value = `A trip to ${place.name}`;
-    $("#tripNotes").value = `${place.name}, ${place.location || place.country}\nMood: ${place.vibe || place.category || "Explore"}\nIdeas: ${place.description || "Research local highlights and current travel costs."}`;
-    savePlan(false);
-    closeDestinationDetails();
-    $("#planner").scrollIntoView({ behavior:"smooth", block:"center" });
-    showToast(`${place.name} added to your trip plan.`);
+  
+$("#addDetailsToPlan").addEventListener("click", event => {
+  const place = allDestinations().find(
+    item => item.id === event.currentTarget.dataset.destinationId
+  );
+
+  if (!place) return;
+
+  // Add destination to the trip planner
+  $("#tripName").value = `A trip to ${place.name}`;
+  $("#tripNotes").value =
+    `${place.name}, ${place.location || place.country}\n` +
+    `Mood: ${place.vibe || place.category || "Explore"}\n` +
+    `Ideas: ${place.description || "Research local highlights and current travel costs."}`;
+
+  savePlan(false);
+
+  // Also save it to Saved Places, without duplicates
+  const saved = getSaved();
+
+  if (!saved.includes(place.id)) {
+    const updatedSaved = [...saved, place.id];
+    const success = writeStorage(STORAGE.saved, updatedSaved);
+
+    if (success) {
+      renderDestinations();
+
+      if (!$("#savedModal").hidden) {
+        renderSavedModal();
+      }
+    }
+  }
+
+  closeDestinationDetails();
+  $("#planner").scrollIntoView({
+    behavior: "smooth",
+    block: "center"
   });
+
+  showToast(`${place.name} added to your trip plan and saved places.`);
+});
+
   $("#saveDetailsPlace").addEventListener("click", event => {
     const id = event.currentTarget.dataset.destinationId;
     toggleSaved(id);
