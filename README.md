@@ -11,27 +11,30 @@ A responsive travel discovery website with a vanilla HTML/CSS/JavaScript fronten
 - Server-side API proxy with basic in-memory caching, timeout handling, and alternate Overpass endpoint
 - Curated destination cards, filters/sorting, destination details, favorites, trip planner, themes, and responsive navigation
 
-## Run with the Node.js backend (recommended for development)
+## Local Setup (Run the Node.js Backend)
 Requires Node.js 18 or newer.
 
-1. Open this folder in VS Code.
-2. Open Terminal in this folder.
+1. Open this project folder in VS Code.
+
+2. Open the terminal in this folder.
+
 3. Install dependencies:
 
-   ```bash
-   npm install
-   ```
+npm install
 
-4. Start the app:
+4. Start the application:
 
-   ```bash
-   npm start
-   ```
+npm start
 
-5. Open http://localhost:3000
-6. Test the API directly at http://localhost:3000/api/health or http://localhost:3000/api/search?q=Haridwar.
+5. Open the application in your browser:
 
-The frontend automatically uses `/api/search` and `/api/details` on localhost. If opened from a static host such as GitHub Pages, it falls back to calling the public APIs directly.
+http://localhost:3000
+
+Test the API endpoints:
+
+- Health check: http://localhost:3000/api/health
+
+Search example: http://localhost:3000/api/search?q=Haridwar
 
 ## Important data limits
 No public source contains complete, verified information about literally every place. Photon search coverage depends on OpenStreetMap mapping and may return towns, villages, neighborhoods, landmarks, or duplicate/multiple matches. Wikipedia summaries and photos may not exist for every result. Attractions depend on what local contributors have mapped. This app does not currently provide live hotel availability/prices, transport fares, or verified real-time budgets; do not treat its indicative budgets as quotes.
