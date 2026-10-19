@@ -1,6 +1,7 @@
 # WanderUI — Find your somewhere
 
 A responsive travel discovery website with a vanilla HTML/CSS/JavaScript frontend and an optional Node.js + Express API backend.
+ **Live Demo:** https://wanderui.onrender.com/
 
 ## Features
 - Search the global OpenStreetMap-based place index through Photon (not limited to the curated starter destinations)
