@@ -1,30 +1,41 @@
 # WanderUI — Find your somewhere
 
-A responsive, premium-style travel discovery website built with **HTML, CSS, and vanilla JavaScript**.
+A responsive travel discovery website with a vanilla HTML/CSS/JavaScript frontend and an optional Node.js + Express API backend.
 
 ## Features
-- Search the curated collection by destination, country, region, category, or travel mood
-- World place search using the public Photon/OpenStreetMap geocoding service (no API key; internet required; results depend on service availability and coverage)
-- Clickable destination cards with a detail panel, suggested attractions, stay duration, and indicative daily budget for selected curated destinations
-- Destination cards with search, category filters, and sorting
-- Surprise Me destination picker
-- Save/remove favorite destinations
-- Saved places modal
-- Trip planner with auto-saving notes
-- Light/dark theme toggle
-- Responsive mobile navigation
-- Demo postcard form (does not send emails)
-- Browser `localStorage` for favorites, theme, and trip plan
+- Search the global OpenStreetMap-based place index through Photon (not limited to the curated starter destinations)
+- Search results include place name, country/region where mapped, and coordinates when available
+- Destination detail enrichment using Wikipedia/Wikimedia descriptions and thumbnails where available
+- Nearby mapped attractions from OpenStreetMap Overpass where coordinates and local mapping data are available
+- Server-side API proxy with basic in-memory caching, timeout handling, and alternate Overpass endpoint
+- Curated destination cards, filters/sorting, destination details, favorites, trip planner, themes, and responsive navigation
 
-## Run locally
-Open `index.html` in a browser. For a local server, open the folder in VS Code and use the Live Server extension.
+## Run with the Node.js backend (recommended for development)
+Requires Node.js 18 or newer.
 
-## Deploy with GitHub Pages
-1. Create a GitHub repository named `wanderui` (or another name you prefer).
-2. Upload `index.html`, `style.css`, `script.js`, and `README.md` to the repository root.
-3. Open **Settings → Pages**.
-4. Under **Build and deployment**, choose **Deploy from a branch**.
-5. Select `main` and `/(root)`, then click **Save**.
-6. Wait a minute and refresh the Pages settings; GitHub will show the published URL.
+1. Open this folder in VS Code.
+2. Open Terminal in this folder.
+3. Install dependencies:
 
-Images and fonts are loaded from external services, so an internet connection is needed for those assets. All interactive behavior is client-side. Destination costs are indicative planning ranges for selected curated destinations, not live quotes. Global search results may not have verified costs or attraction lists.
+   ```bash
+   npm install
+   ```
+
+4. Start the app:
+
+   ```bash
+   npm start
+   ```
+
+5. Open http://localhost:3000
+6. Test the API directly at http://localhost:3000/api/health or http://localhost:3000/api/search?q=Haridwar.
+
+The frontend automatically uses `/api/search` and `/api/details` on localhost. If opened from a static host such as GitHub Pages, it falls back to calling the public APIs directly.
+
+## Important data limits
+No public source contains complete, verified information about literally every place. Photon search coverage depends on OpenStreetMap mapping and may return towns, villages, neighborhoods, landmarks, or duplicate/multiple matches. Wikipedia summaries and photos may not exist for every result. Attractions depend on what local contributors have mapped. This app does not currently provide live hotel availability/prices, transport fares, or verified real-time budgets; do not treat its indicative budgets as quotes.
+
+Public APIs can be rate-limited or temporarily unavailable. Keep caching enabled and avoid excessive requests. OpenStreetMap data attribution: https://www.openstreetmap.org/copyright. Wikimedia/Wikipedia content and images are subject to their respective licenses and attribution requirements.
+
+## Deploy
+GitHub Pages can host the static frontend, but **cannot run this Express server**. For the full backend experience, deploy this folder to a Node.js hosting service and configure the frontend to use that backend URL (and enable appropriate CORS/security settings if frontend and backend use different domains). The static frontend remains usable with its direct public-API fallback on GitHub Pages.

@@ -18,6 +18,7 @@ let destinations = [
   ,{ id:"munnar", name:"Munnar", country:"India", region:"Asia", category:"Nature", vibe:"Green & peaceful", budget:35, tag:"Tea country", image:"https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=900&q=82", description:"Rolling tea gardens, misty hills, and winding scenic roads.", location:"Kerala, India" }
   ,{ id:"udaipur", name:"Udaipur", country:"India", region:"Asia", category:"Culture", vibe:"Romantic & relaxed", budget:40, tag:"City of lakes", image:"https://images.unsplash.com/photo-1567157577867-05ccb1388e66?auto=format&fit=crop&w=900&q=82", description:"Lake palaces, rooftop views, and winding old-city streets.", location:"Rajasthan, India" }
   ,{ id:"rishikesh", name:"Rishikesh", country:"India", region:"Asia", category:"Nature", vibe:"Wellness & adventure", budget:30, tag:"River & retreat", image:"https://images.unsplash.com/photo-1587922546307-776227941871?auto=format&fit=crop&w=900&q=82", description:"Riverside cafés, yoga, forest walks, and outdoor adventure.", location:"Uttarakhand, India" }
+  ,{ id:"haridwar", name:"Haridwar", country:"India", region:"Asia", category:"Culture", vibe:"Sacred & riverside", budget:25, tag:"Ganga & heritage", image:"https://images.unsplash.com/photo-1606293926075-69a00dbadres?auto=format&fit=crop&w=900&q=82", description:"A sacred Ganga-side city known for evening aarti, temples, and lively local bazaars.", location:"Uttarakhand, India" }
   ,{ id:"amritsar", name:"Amritsar", country:"India", region:"Asia", category:"Culture", vibe:"Warm & meaningful", budget:25, tag:"Heritage city", image:"https://images.unsplash.com/photo-1588096344356-7b7c7f0b9c6e?auto=format&fit=crop&w=900&q=82", description:"Visit the Golden Temple and experience Punjabi hospitality.", location:"Punjab, India" }
   ,{ id:"andaman", name:"Andaman Islands", country:"India", region:"Asia", category:"Coast", vibe:"Tropical & adventurous", budget:65, tag:"Island escape", image:"https://images.unsplash.com/photo-1510414842594-a61c69b5ae57?auto=format&fit=crop&w=900&q=82", description:"Clear waters, coral reefs, and quiet tropical beaches.", location:"Andaman and Nicobar Islands, India" }
   ,{ id:"hampi", name:"Hampi", country:"India", region:"Asia", category:"Culture", vibe:"Ancient & exploratory", budget:25, tag:"Ruins & stories", image:"https://images.unsplash.com/photo-1600100397608-f010a4b1e5b8?auto=format&fit=crop&w=900&q=82", description:"Explore monumental ruins and surreal boulder-strewn landscapes.", location:"Karnataka, India" }
@@ -70,6 +71,7 @@ const destinationGuides = {
   "munnar": { cost:"₹2,000–₹5,000/person/day", duration:"2–3 days", highlights:["Tea gardens and tea museum","Eravikulam National Park","Mattupetty Dam","Scenic hill viewpoints"], bestTime:"September–March" },
   "udaipur": { cost:"₹2,000–₹5,000/person/day", duration:"2–3 days", highlights:["City Palace","Lake Pichola","Jagdish Temple","Old-city lanes and rooftop views"], bestTime:"October–March" },
   "rishikesh": { cost:"₹1,500–₹4,000/person/day", duration:"2–3 days", highlights:["Ram Jhula and Lakshman Jhula area","Triveni Ghat evening aarti","Riverside cafés","Yoga and riverside walks"], bestTime:"September–November or February–April" },
+  "haridwar": { cost:"₹1,200–₹3,000/person/day", duration:"1–2 days", highlights:["Har Ki Pauri and Ganga aarti","Mansa Devi Temple (check ropeway status)","Maya Devi Temple","Local bazaars and North Indian food"], bestTime:"October–March" },
   "amritsar": { cost:"₹1,500–₹3,500/person/day", duration:"1–2 days", highlights:["Golden Temple","Jallianwala Bagh","Partition Museum","Punjabi food and local markets"], bestTime:"October–March" },
   "pondicherry": { cost:"₹2,000–₹5,000/person/day", duration:"2–3 days", highlights:["French Quarter","Promenade Beach","Cafés and heritage streets","Auroville area (check visitor access)"], bestTime:"November–February" },
   "hampi": { cost:"₹1,500–₹3,500/person/day", duration:"2–3 days", highlights:["Virupaksha Temple","Vijaya Vittala Temple complex","Hampi Bazaar area","Boulder landscapes and ruins"], bestTime:"October–February" },
@@ -113,6 +115,101 @@ function openDestinationDetails(id) {
   $("#saveDetailsPlace").textContent = isSaved(place.id) ? "♥ Saved" : "♡ Save place";
   $("#detailsModal").hidden = false;
   $("#closeDetails").focus();
+  // Global search results get live encyclopedia context and nearby mapped attractions.
+  // Curated destinations keep their reviewed guide and indicative budget.
+  if (place.id.startsWith("world-")) loadLiveDestinationInfo(place);
+}
+
+
+const liveDetailsCache = new Map();
+
+async function loadLiveDestinationInfo(place) {
+  const title = place.name;
+  const cacheKey = `${place.id}:${place.coordinates?.join(",") || "no-coordinates"}`;
+  if (liveDetailsCache.has(cacheKey)) {
+    applyLiveDestinationInfo(liveDetailsCache.get(cacheKey), place);
+    return;
+  }
+  $("#detailsDescription").textContent = `Loading available public information for ${title}…`;
+  $("#detailsHighlights").innerHTML = "<li>Looking for nearby mapped attractions…</li>";
+  const result = { description: "", image: "", wikiUrl: "", attractions: [] };
+  const tasks = [];
+
+  // Prefer our Node/Express API while running locally/deployed with the backend.
+  // Static GitHub Pages falls back to the public APIs below.
+  if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
+    try {
+      const apiResponse = await fetch(`/api/details?name=${encodeURIComponent(place.name)}&country=${encodeURIComponent(place.country || "")}&lat=${encodeURIComponent(place.coordinates?.[1] ?? "")}&lon=${encodeURIComponent(place.coordinates?.[0] ?? "")}`);
+      if (apiResponse.ok) {
+        const apiData = await apiResponse.json();
+        const apiResult = { description: apiData.description || "", image: apiData.image || "", wikiUrl: apiData.wikiUrl || "", attractions: apiData.attractions || [] };
+        liveDetailsCache.set(cacheKey, apiResult);
+        applyLiveDestinationInfo(apiResult, place);
+        return;
+      }
+    } catch (_) { /* Local API is not running; use direct public API fallback. */ }
+  }
+
+  // Wikipedia search + summary: no API key required; coverage varies by place.
+  tasks.push((async () => {
+    try {
+      const searchUrl = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(title + (place.country ? " " + place.country : ""))}&format=json&origin=*&srlimit=1`;
+      const searchResponse = await fetch(searchUrl);
+      if (!searchResponse.ok) return;
+      const searchData = await searchResponse.json();
+      const pageTitle = searchData.query?.search?.[0]?.title;
+      if (!pageTitle) return;
+      const summaryResponse = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(pageTitle.replace(/ /g, "_"))}`);
+      if (!summaryResponse.ok) return;
+      const summary = await summaryResponse.json();
+      if (summary.type === "disambiguation") return;
+      result.description = summary.extract || "";
+      result.image = summary.thumbnail?.source || "";
+      result.wikiUrl = summary.content_urls?.desktop?.page || "";
+    } catch (_) { /* Keep the place usable when this public service is unavailable. */ }
+  })());
+
+  // Nearby points of interest from OpenStreetMap. Only called when a user opens details.
+  if (Array.isArray(place.coordinates) && place.coordinates.length === 2) {
+    const [lon, lat] = place.coordinates;
+    if (Number.isFinite(lat) && Number.isFinite(lon)) {
+      tasks.push((async () => {
+        try {
+          const query = `[out:json][timeout:12];(node(around:8000,${lat},${lon})[tourism~"^(attraction|museum|viewpoint|zoo|theme_park)$"];way(around:8000,${lat},${lon})[tourism~"^(attraction|museum|viewpoint|zoo|theme_park)$"];node(around:8000,${lat},${lon})[historic];way(around:8000,${lat},${lon})[historic];node(around:8000,${lat},${lon})[amenity~"^(place_of_worship|arts_centre)$"];);out center tags 35;`;
+          const response = await fetch("https://overpass-api.de/api/interpreter", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" }, body: `data=${encodeURIComponent(query)}` });
+          if (!response.ok) return;
+          const data = await response.json();
+          const seen = new Set();
+          result.attractions = (data.elements || []).map(item => item.tags?.name).filter(name => {
+            if (!name) return false;
+            const key = name.toLowerCase();
+            if (seen.has(key) || key === title.toLowerCase()) return false;
+            seen.add(key); return true;
+          }).slice(0, 8);
+        } catch (_) { /* Overpass may be busy or have no nearby mapped attractions. */ }
+      })());
+    }
+  }
+
+  await Promise.all(tasks);
+  liveDetailsCache.set(cacheKey, result);
+  applyLiveDestinationInfo(result, place);
+}
+
+function applyLiveDestinationInfo(info, place) {
+  // Avoid changing a modal that the user has already closed or switched to another place.
+  if ($("#detailsModal").hidden || $("#detailsTitle").textContent !== place.name) return;
+  if (info.description) $("#detailsDescription").textContent = info.description;
+  if (info.image) { $("#detailsImage").src = info.image; $("#detailsImage").alt = `${place.name} — image from Wikipedia`; }
+  if (info.attractions.length) {
+    $("#detailsHighlights").innerHTML = info.attractions.map(name => `<li>${escapeHtml(name)}</li>`).join("");
+  } else {
+    $("#detailsHighlights").innerHTML = `<li>Search a local tourism website for verified attractions in ${escapeHtml(place.name)}</li><li>Explore nearby heritage, nature and cultural sites</li>`;
+  }
+  const sources = [];
+  if (info.wikiUrl) sources.push(`<a href="${escapeHtml(info.wikiUrl)}" target="_blank" rel="noopener noreferrer">Wikipedia description</a>`);
+  sources.push('<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap data</a>');
+  $("#detailsNote").innerHTML = `Live public data when available. No verified live hotel prices or trip budget are provided for this result. ${sources.join(" · ")}`;
 }
 
 function closeDestinationDetails() {
@@ -170,9 +267,19 @@ async function searchWorldPlaces(query) {
   renderDestinations();
   try {
     // Photon is a public OpenStreetMap-based place search API; no API key is needed.
-    const response = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=12&lang=en`);
-    if (!response.ok) throw new Error("Place search is temporarily unavailable");
-    const data = await response.json();
+    let response;
+    let data;
+    if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
+      try {
+        response = await fetch(`/api/search?q=${encodeURIComponent(query)}&limit=12`);
+        if (response.ok) data = await response.json();
+      } catch (_) { /* Continue with direct Photon fallback. */ }
+    }
+    if (!data) {
+      response = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=12&lang=en`);
+      if (!response.ok) throw new Error("Place search is temporarily unavailable");
+      data = await response.json();
+    }
     if (requestId !== searchRequestId) return;
     const existingNames = new Set(destinations.map(place => place.name.toLowerCase()));
     remoteResults = (data.features || []).map((feature, index) => {
